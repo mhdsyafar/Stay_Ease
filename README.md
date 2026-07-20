@@ -1,58 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# StayEase
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+StayEase adalah aplikasi manajemen pemesanan kamar hotel dan penginapan kelas premium (Premium Property & Guest Management). Proyek ini dibangun menggunakan framework **Laravel** dan dikonfigurasi untuk memudahkan pemula dalam memelajari alur pembuatan aplikasi web dengan fitur autentikasi dan relasi database.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ Teknologi yang Digunakan
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+*   **Backend:** PHP 8.3+, Laravel Framework
+*   **Frontend:** Tailwind CSS, Alpine.js, Laravel Blade
+*   **Autentikasi:** Laravel Breeze (disesuaikan dengan Bahasa Indonesia)
+*   **Database:** SQLite (untuk kemudahan development)
+*   **Asset Bundler:** Vite
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🏗️ Struktur Database Utama
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Sistem ini memiliki 3 tabel utama yang saling berelasi:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Tabel `users`
+Tabel bawaan Laravel untuk mengelola data pengguna (tamu atau admin).
+*   `id` (Primary Key)
+*   `name`, `email`, `password`
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 2. Tabel `kamar` (Rooms)
+Menyimpan informasi tentang kamar yang tersedia.
+*   `id_kamar` (Primary Key)
+*   `nomor_kamar` (String) - Nomor identitas kamar
+*   `tipe_kamar` (String) - Jenis kamar (contoh: Deluxe, Suite)
+*   `harga` (Double) - Harga per malam
+*   `status_kamar` (Enum) - `tersedia`, `terisi`, `tidak tersedia` (Default: `tersedia`)
 
-## Agentic Development
+### 3. Tabel `boking` (Bookings)
+Menyimpan data transaksi pemesanan yang menghubungkan pengguna dengan kamar.
+*   `id_boking` (Primary Key)
+*   `id_kamar` (Foreign Key) - Berelasi ke tabel `kamar`
+*   `id_user` (Foreign Key) - Berelasi ke tabel `users`
+*   `tanggal_boking` (Date) - Tanggal transaksi dilakukan
+*   `tanggal_check_in` (Date) - Rencana tanggal masuk
+*   `tanggal_check_out` (Date) - Rencana tanggal keluar
+*   `status_boking` (Enum) - `pending`, `dikonfirmasi`, `selesai`, `batal` (Default: `pending`)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## 🚀 Fitur Utama
 
-php artisan boost:install
-```
+1.  **Halaman Utama (Landing Page) Premium:** Desain mewah dan responsif untuk menarik pengunjung pertama kali (`/`).
+2.  **Sistem Autentikasi (Bahasa Indonesia):** Fitur Login, Register, dan Lupa Password telah diterjemahkan ke Bahasa Indonesia menggunakan struktur *layout* sederhana (bawaan Laravel Breeze) agar mudah dipelajari.
+3.  **Relasi Antar Tabel (Cascade Delete):** Jika sebuah kamar atau pengguna dihapus, maka data pemesanan (`boking`) yang terkait juga akan otomatis terhapus untuk menjaga integritas data.
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 💻 Cara Menjalankan Proyek (Local Development)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Ikuti langkah-langkah berikut untuk menjalankan StayEase di komputer Anda (menggunakan Laragon/XAMPP):
 
-## Code of Conduct
+1.  **Persiapan Lingkungan:** Pastikan PHP, Composer, dan Node.js sudah terinstal.
+2.  **Install Dependensi PHP:**
+    ```bash
+    composer install
+    ```
+3.  **Install Dependensi Frontend (NPM):**
+    ```bash
+    npm install
+    npm run build
+    ```
+    *(Gunakan `npm run dev` jika sedang melakukan perubahan pada file CSS/JS agar otomatis direload).*
+4.  **Siapkan File Environment:**
+    *   Duplikat file `.env.example` dan ubah namanya menjadi `.env`.
+    *   Pastikan konfigurasi bahasa sudah diset: `APP_LOCALE=id`
+5.  **Generate Application Key:**
+    ```bash
+    php artisan key:generate
+    ```
+6.  **Migrasi Database:**
+    ```bash
+    php artisan migrate
+    ```
+    *(SQLite database biasanya otomatis terbuat di dalam folder `database/database.sqlite`).*
+7.  **Jalankan Server Lokal:**
+    ```bash
+    php artisan serve
+    ```
+8.  **Akses di Browser:** Buka `http://127.0.0.1:8000`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 🔑 Akun Uji Coba (Test Account)
+Untuk mempermudah pengujian, Anda bisa login menggunakan akun default berikut (setelah menjalankan `php artisan migrate:fresh --seed`):
+*   **Email:** `admin@stayease.com`
+*   **Password:** `password`
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📝 Catatan Khusus untuk Pemula
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+*   **Tampilan Auth:** Jika Anda melihat file di `resources/views/auth/`, strukturnya sengaja dibuat sesederhana mungkin (menggunakan `x-guest-layout` standar) agar Anda mudah memahami bagaimana form mengirim data (menggunakan tag `<form method="POST" action="...">`).
+*   **Pesan Error & Bahasa:** Seluruh pesan validasi (seperti "Email wajib diisi") diatur dari dalam folder `lang/id/`. Jika Anda ingin mengubah pesannya, Anda bisa mengedit file `lang/id/validation.php`.
+*   **Migrasi:** Jika Anda melakukan kesalahan pada struktur database, Anda bisa menjalankan `php artisan migrate:fresh` untuk menghapus dan membuat ulang semua tabel dari awal (hati-hati, data lama akan hilang).

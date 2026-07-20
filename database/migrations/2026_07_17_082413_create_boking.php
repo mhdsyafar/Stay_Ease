@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('boking', function (Blueprint $table) {
             $table->id('id_boking');
             $table->foreignId('id_kamar')->references('id_kamar')->on('kamar')->cascadeOnDelete();
-            $table->foreignId('id_user')->references('id_user')->on('users')->cascadeOnDelete();
+            $table->foreignId('id_user')->references('id')->on('users')->cascadeOnDelete();
             $table->date('tanggal_boking');
             $table->date('tanggal_check_in');
             $table->date('tanggal_check_out');
-            $table->enum('status_boking')->default('pending');
+            $table->enum('status_boking', ['pending', 'dikonfirmasi', 'selesai', 'batal'])->default('pending');
             $table->timestamps();
         });
     }

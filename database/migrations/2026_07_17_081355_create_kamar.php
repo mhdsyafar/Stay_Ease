@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nomor_kamar');
             $table->string('tipe_kamar');
             $table->double('harga');
-            $table->enum('status_kamar')->default('tersedia');
+            $table->enum('status_kamar', ['tersedia', 'terisi', 'tidak tersedia'])->default('tersedia');
             $table->timestamps();
         });
     }
