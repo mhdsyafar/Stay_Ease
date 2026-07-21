@@ -1,45 +1,50 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Informasi Profil') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Perbarui informasi profil dan alamat email akun Anda.") }}
-        </p>
-    </header>
-
+<section style="max-width:640px;">
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" style="display:flex; flex-direction:column; gap:1.25rem; margin:0;">
         @csrf
         @method('patch')
 
+        {{-- Name --}}
         <div>
-            <x-input-label for="name" :value="__('Nama')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <label for="name" style="display:block; font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">
+                Nama Lengkap
+            </label>
+            <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name"
+                   style="width:100%; padding:0.625rem 0.875rem; font-size:0.875rem; border:1px solid #cbd5e1; border-radius:0.75rem; color:#1e293b; transition:all 0.2s;"
+                   onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.15)';"
+                   onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';">
+            @if($errors->get('name'))
+                <p style="margin:0.35rem 0 0; font-size:0.75rem; color:#ef4444; font-weight:600;">{{ $errors->first('name') }}</p>
+            @endif
         </div>
 
+        {{-- Email --}}
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <label for="email" style="display:block; font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">
+                Alamat Email
+            </label>
+            <input id="email" name="email" type="email" value="{{ old('email', $user->email) }}" required autocomplete="username"
+                   style="width:100%; padding:0.625rem 0.875rem; font-size:0.875rem; border:1px solid #cbd5e1; border-radius:0.75rem; color:#1e293b; transition:all 0.2s;"
+                   onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.15)';"
+                   onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';">
+            @if($errors->get('email'))
+                <p style="margin:0.35rem 0 0; font-size:0.75rem; color:#ef4444; font-weight:600;">{{ $errors->first('email') }}</p>
+            @endif
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
+                <div style="margin-top:0.75rem; padding:0.75rem 1rem; background:#fef3c7; border:1px solid #fde68a; border-radius:0.75rem;">
+                    <p style="margin:0; font-size:0.8rem; color:#92400e; font-weight:500;">
                         {{ __('Alamat email Anda belum diverifikasi.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                        <button form="send-verification" style="background:none; border:none; padding:0; font-size:0.8rem; color:#b45309; text-decoration:underline; cursor:pointer; font-weight:700; margin-left:0.25rem;">
                             {{ __('Klik di sini untuk mengirim ulang email verifikasi.') }}
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
+                        <p style="margin:0.5rem 0 0; font-size:0.75rem; color:#15803d; font-weight:700;">
                             {{ __('Tautan verifikasi baru telah dikirim ke alamat email Anda.') }}
                         </p>
                     @endif
@@ -47,17 +52,24 @@
             @endif
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Simpan') }}</x-primary-button>
+        {{-- Submit Action --}}
+        <div style="display:flex; align-items:center; gap:1rem; margin-top:0.5rem;">
+            <button type="submit" style="
+                display:inline-flex; align-items:center; gap:0.5rem;
+                padding:0.65rem 1.35rem; font-size:0.875rem; font-weight:700;
+                border-radius:0.75rem; border:none; background:linear-gradient(135deg, #0f1b4c 0%, #1e3a8a 100%);
+                color:#fff; cursor:pointer; box-shadow:0 4px 14px rgba(15,27,76,0.3); transition:all 0.2s;"
+                onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(15,27,76,0.45)'"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(15,27,76,0.3)'">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                Simpan Perubahan
+            </button>
 
             @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                >{{ __('Tersimpan.') }}</p>
+                <span style="font-size:0.8rem; font-weight:700; color:#10b981; display:flex; align-items:center; gap:0.25rem;">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    Tersimpan
+                </span>
             @endif
         </div>
     </form>

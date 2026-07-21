@@ -25,6 +25,7 @@
             $isDash = request()->routeIs('dashboard');
             $isKamar = request()->routeIs('kamar.*');
             $isBoking = request()->routeIs('boking.*');
+            $isProfile = request()->routeIs('profile.*');
         @endphp
  
         {{-- Dashboard --}}
@@ -102,47 +103,58 @@
             @endif
         </a>
 
-        {{-- Settings --}}
-        <a href="#" style="
+        {{-- Profile --}}
+        <a href="{{ route('profile.edit') }}" style="
             display:flex; align-items:center; gap:0.75rem;
             padding: 0.7rem 0.875rem;
             border-radius: 0.75rem;
             font-size: 0.875rem; font-weight: 600;
             text-decoration: none;
-            color: rgba(255,255,255,0.65);
-            border: 1px solid transparent;
-            transition: all 0.15s;"
-           onmouseover="this.style.background='rgba(255,255,255,0.08)'; this.style.color='#fff';"
-           onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.65)';">
-            <div style="width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <svg width="16" height="16" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            transition: all 0.15s;
+            {{ $isProfile
+                ? 'background:rgba(245,197,24,0.15); color:#f5c518; border:1px solid rgba(245,197,24,0.3);'
+                : 'color:rgba(255,255,255,0.65); border:1px solid transparent;' }}"
+           onmouseover="{{ $isProfile ? '' : 'this.style.background=\'rgba(255,255,255,0.08)\'; this.style.color=\'#fff\';' }}"
+           onmouseout="{{ $isProfile ? '' : 'this.style.background=\'transparent\'; this.style.color=\'rgba(255,255,255,0.65)\';' }}">
+            <div style="width:32px; height:32px; border-radius:8px; background:{{ $isProfile ? 'rgba(245,197,24,0.25)' : 'rgba(255,255,255,0.06)' }}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="16" height="16" fill="none" stroke="{{ $isProfile ? '#f5c518' : 'rgba(255,255,255,0.5)' }}" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                 </svg>
             </div>
-            Settings
+            Profile
+            @if($isProfile)
+                <div style="margin-left:auto; width:6px; height:6px; border-radius:50%; background:#f5c518;"></div>
+            @endif
         </a>
     </nav>
 
-    {{-- User Profile --}}
+    {{-- User Profile Card --}}
     <div style="padding: 1rem; margin: 0 0.75rem 0.875rem; background:rgba(255,255,255,0.06); border-radius:1rem; border:1px solid rgba(255,255,255,0.08);">
         @php
             $nameParts = explode(' ', Auth::user()->name ?? 'User');
             $initials  = strtoupper(substr($nameParts[0],0,1) . substr($nameParts[1] ?? '',0,1));
         @endphp
         <div style="display:flex; align-items:center; gap:0.75rem;">
-            <div style="width:2.25rem; height:2.25rem; border-radius:50%; background:linear-gradient(135deg,#f5c518,#f97316); color:#0f1b4c; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex-shrink:0; box-shadow:0 2px 8px rgba(245,197,24,0.4);">
+            <a href="{{ route('profile.edit') }}" style="text-decoration:none; display:flex; align-items:center; justify-content:center; width:2.25rem; height:2.25rem; border-radius:50%; background:linear-gradient(135deg,#f5c518,#f97316); color:#0f1b4c; font-weight:800; font-size:0.8rem; flex-shrink:0; box-shadow:0 2px 8px rgba(245,197,24,0.4);" title="Kelola Profil">
                 {{ $initials }}
-            </div>
+            </a>
             <div style="min-width:0; flex:1;">
-                <p style="font-size:0.8125rem; font-weight:700; color:#fff; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ Auth::user()->name ?? 'User' }}</p>
-                <form method="POST" action="{{ route('logout') }}" style="margin:0;">
-                    @csrf
-                    <button type="submit" style="background:none; border:none; padding:0; cursor:pointer; font-size:0.7rem; color:rgba(255,255,255,0.4); font-weight:500; margin-top:1px;"
-                            onmouseover="this.style.color='#f5c518'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
-                        Sign Out
-                    </button>
-                </form>
+                <a href="{{ route('profile.edit') }}" style="font-size:0.8125rem; font-weight:700; color:#fff; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; text-decoration:none;" onmouseover="this.style.color='#f5c518'" onmouseout="this.style.color='#fff'">
+                    {{ Auth::user()->name ?? 'User' }}
+                </a>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-top:2px;">
+                    <a href="{{ route('profile.edit') }}" style="font-size:0.7rem; color:rgba(255,255,255,0.6); font-weight:500; text-decoration:none;" onmouseover="this.style.color='#f5c518'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">
+                        Profile
+                    </a>
+                    <span style="font-size:0.6rem; color:rgba(255,255,255,0.2);">•</span>
+                    <form method="POST" action="{{ route('logout') }}" style="margin:0; display:inline;">
+                        @csrf
+                        <button type="submit" style="background:none; border:none; padding:0; cursor:pointer; font-size:0.7rem; color:rgba(255,255,255,0.4); font-weight:500;"
+                                onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+                            Sign Out
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
