@@ -14,11 +14,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name'        => 'Admin',
-            'email'       => 'admin@stayease.com',
-            'password'    => Hash::make('password'),
-            'member_tier' => 'standard',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@stayease.com'],
+            [
+                'name'        => 'Admin StayEase',
+                'password'    => Hash::make('admin123'),
+                'member_tier' => 'vip',
+                'role'        => 'admin',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'pelanggan@stayease.com'],
+            [
+                'name'        => 'Pelanggan Demo',
+                'password'    => Hash::make('pelanggan123'),
+                'member_tier' => 'standard',
+                'role'        => 'pelanggan',
+            ]
+        );
     }
 }

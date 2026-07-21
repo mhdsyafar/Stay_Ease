@@ -102,30 +102,6 @@
                 <div style="margin-left:auto; width:6px; height:6px; border-radius:50%; background:#f5c518;"></div>
             @endif
         </a>
-
-        {{-- Profile --}}
-        <a href="{{ route('profile.edit') }}" style="
-            display:flex; align-items:center; gap:0.75rem;
-            padding: 0.7rem 0.875rem;
-            border-radius: 0.75rem;
-            font-size: 0.875rem; font-weight: 600;
-            text-decoration: none;
-            transition: all 0.15s;
-            {{ $isProfile
-                ? 'background:rgba(245,197,24,0.15); color:#f5c518; border:1px solid rgba(245,197,24,0.3);'
-                : 'color:rgba(255,255,255,0.65); border:1px solid transparent;' }}"
-           onmouseover="{{ $isProfile ? '' : 'this.style.background=\'rgba(255,255,255,0.08)\'; this.style.color=\'#fff\';' }}"
-           onmouseout="{{ $isProfile ? '' : 'this.style.background=\'transparent\'; this.style.color=\'rgba(255,255,255,0.65)\';' }}">
-            <div style="width:32px; height:32px; border-radius:8px; background:{{ $isProfile ? 'rgba(245,197,24,0.25)' : 'rgba(255,255,255,0.06)' }}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <svg width="16" height="16" fill="none" stroke="{{ $isProfile ? '#f5c518' : 'rgba(255,255,255,0.5)' }}" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-            </div>
-            Profile
-            @if($isProfile)
-                <div style="margin-left:auto; width:6px; height:6px; border-radius:50%; background:#f5c518;"></div>
-            @endif
-        </a>
     </nav>
 
     {{-- User Profile Card --}}
